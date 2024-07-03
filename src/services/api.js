@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8000';
+const API_URL="https://vercel.com/galegizmos-projects/clube-bd-back-end"
 
 
 export const APIHeaders = {
