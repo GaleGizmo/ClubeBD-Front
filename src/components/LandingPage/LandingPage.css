@@ -1,0 +1,73 @@
+/* Estilos base (para todas las pantallas) */
+.comics-grid {
+  width: 90%;
+  margin: 60px auto 0;
+  display: grid;
+  gap: 20px;
+  justify-content: center;
+}
+.landing-page > h1 {
+  width: 100%;
+  background-color: #f1c40f;
+  position: fixed;
+  top: 0;
+  z-index: 2;
+  text-align: center;
+  padding-bottom: 10px;
+}
+.landing-page{
+  margin-bottom: 20px;
+}
+
+/* Móvil (hasta 767px) */
+@media screen and (max-width: 767px) {
+  .comics-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+
+  .comic-card {
+    height: 300px;
+  }
+  .user-select {
+    width: 200px;
+  }
+  .comic-card .comic-cover {
+    height: 200px;
+  }
+  .comic-cover-container {
+    height: unset;
+  }
+  .landing-page > h1{
+    font-size: 18px;
+    padding: 10px;
+  }
+  .comic-card h3 {
+    font-size: 0.9em;
+  }
+
+  .comic-card p {
+    font-size: 0.8em;
+  }
+}
+
+/* Tablet (768px - 1023px) */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  .comics-grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  }
+
+  .comic-card {
+    height: 350px;
+  }
+
+  .comic-card .comic-cover {
+    height: 250px;
+  }
+}
+
+/* Desktop (1024px y superior) */
+@media screen and (min-width: 1024px) {
+  .comics-grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
+}

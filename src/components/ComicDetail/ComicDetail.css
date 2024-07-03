@@ -1,0 +1,166 @@
+.comic-detail {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.tag {
+  color: #857777;
+}
+
+.back-button {
+  font-size: 2em;
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+}
+
+.back-button:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+}
+.title-container{
+  position: fixed;
+  top:0;
+  left:0;
+  z-index: 2;
+  width: 100%;
+  height: 70px;
+  background-color: white;
+}
+.comic-detail h1 {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0 10px 7px 10px;
+  background: linear-gradient(to bottom, #ff7f50, #ed8c67);
+  text-align: center;
+  margin: 0 auto 20px auto;
+  border: 2px solid #e74c3c;
+  border-radius: 16px;
+  z-index: 1000;
+}
+
+.comic-content {
+  position: relative;
+  margin: 80px auto 0 auto;
+  width: fit-content;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+}
+
+.comic-cover {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
+}
+
+.comic-cover img {
+  max-width: 300px;
+  height: auto;
+  border: 2px solid #e74c3c;
+  border-radius: 8px;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.comic-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  max-width: 600px;
+  border: 2px solid #e74c3c;
+  padding: 8px;
+  border-radius: 8px;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.comic-info h2,
+.comic-info h3 {
+  margin-bottom: 2px;
+}
+
+.comic-info > p {
+  margin-bottom: 15px;
+  line-height: 1.5;
+}
+
+/* Estilos para dispositivos móviles */
+@media (max-width: 767px) {
+  .comic-detail {
+    padding: 20px 10px;
+  }
+
+  .back-button {
+    top: 0px;
+    left: 5px;
+  }
+
+  .comic-detail h1 {
+    top: 25px;
+    width: 70%;
+    font-size: 1em;
+    padding: 1px 0 3px 0;
+  }
+
+  .comic-content {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .comic-cover img {
+    margin: 0 auto;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .comic-info {
+    width: 90%;
+    max-width: none;
+    margin-top: 20px;
+  }
+
+  .comic-info h2,
+  .comic-info h3 {
+    font-size: 1.2em;
+  }
+}
+
+/* Estilos para tablets */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .comic-detail {
+    padding: 30px 15px;
+  }
+
+  .back-button {
+    top: 10px;
+    left: 10px;
+  }
+
+  .comic-detail h1 {
+    top: 10px;
+  }
+
+  .comic-content {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .comic-cover img {
+    max-width: 80%;
+    height: auto;
+  }
+
+  .comic-info {
+    width: 80%;
+    max-width: none;
+    margin-top: 20px;
+  }
+
+  .comic-info h2,
+  .comic-info h3 {
+    font-size: 1.4em;
+  }
+}

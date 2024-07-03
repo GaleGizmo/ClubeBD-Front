@@ -1,0 +1,61 @@
+.comment-section {
+  width: 50%;
+  margin: 40px auto 0 auto;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: moccasin;
+}
+.comment-section > h3 {
+  background-color: coral;
+  text-align: center;
+  border-radius: 8px;
+  padding: 5px;
+}
+
+.comment {
+  position: relative;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 5px 5px 0 5px;
+  background-color: #e9e4e4
+}
+.comment > p {
+    font-weight: 500;
+  margin-bottom: 20px;
+}
+.comment > small {
+  display: flex;
+  margin-top: auto;
+  margin-bottom: 2px;
+}
+.add-comment-form {
+  margin-top: 20px;
+}
+.add-comment-form > textarea {
+  width: 100%;
+  resize: none;
+  padding: 7px;
+  box-sizing: border-box;
+}
+.delete-comment {
+  position: absolute;
+  right: 2px;
+  bottom: 2px;
+  display: flex;
+  font-size: 1.2em;
+  border: none;
+
+  background-color: transparent
+}
+.delete-comment:hover{
+    cursor: pointer;
+    transform: scale(1.1);
+}
+/* Estilos para dispositivos móviles */
+@media (max-width: 767px) {
+  .comment-section {
+   width: 90%;
+  }
+}
