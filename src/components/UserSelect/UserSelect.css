@@ -5,11 +5,7 @@
     border-radius: 8px;
     padding: 20px;
     text-align: center;
-    background: linear-gradient(
-        to bottom right,        
-        #d3d3d3,                
-        #a9a9a9                 
-    );
+    background: linear-gradient(to bottom right, #f1c40f, #bf9c10);
     box-shadow: 4px 4px 8px rgba(0,0,0,0.4);
 }
 .no-users{
