@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL="https://vercel.com/galegizmos-projects/clube-bd-back-end"
+
 
 
 export const APIHeaders = {
@@ -11,7 +11,7 @@ export const APIHeaders = {
   };
 
 export const api = axios.create({
-  baseURL: API_URL,
+  baseURL: process.env.REACT_APP_API_URL,
   headers: APIHeaders,
 });
 
