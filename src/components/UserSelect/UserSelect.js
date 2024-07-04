@@ -1,14 +1,20 @@
-import React from "react";
+import React  from "react";
 import { useAuth } from "../../context/AuthContext";
 import "./UserSelect.css";
+import Loader from "../Loader/Loader";
 
 function UserSelect() {
-  const { availableUsers, login } = useAuth();
+  const { availableUsers, login, loading } = useAuth();
+  
+
+  
 
   const handleUserSelect = (userId) => {
     login(userId);
   };
-
+  if (loading) {
+    return <Loader/>
+  }
   return (
     <div>
       {availableUsers.length > 0 ? (

@@ -7,6 +7,7 @@ import { useAuth } from "../../context/AuthContext";
 import { TiArrowBackOutline } from "react-icons/ti";
 import "./ComicDetail.css";
 import { useNavigate } from "react-router-dom";
+import Loader from "../Loader/Loader";
 
 function ComicDetail() {
   const { id } = useParams();
@@ -29,7 +30,7 @@ function ComicDetail() {
     return new Date(dateString).getFullYear();
   }
 
-  if (!comic) return <div>Cargando...</div>;
+  if (!comic) return <Loader/>
 
   return (
     <div className="comic-detail">

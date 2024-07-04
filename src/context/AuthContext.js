@@ -1,15 +1,16 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
-import { getAvailableUsers, loginUser, logoutUser } from '../services/api';
+import React, { createContext, useState, useContext, useEffect } from "react";
+import { getAvailableUsers, loginUser, logoutUser } from "../services/api";
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
     // Intenta obtener el usuario del localStorage al iniciar
-    const savedUser = localStorage.getItem('user');
+    const savedUser = localStorage.getItem("user");
     return savedUser ? JSON.parse(savedUser) : null;
   });
   const [availableUsers, setAvailableUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Cargar usuarios disponibles al iniciar la aplicación
@@ -19,19 +20,21 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     // Guarda el usuario en localStorage cada vez que cambie
     if (user) {
-      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem("user", JSON.stringify(user));
     } else {
-      localStorage.removeItem('user');
+      localStorage.removeItem("user");
     }
   }, [user]);
 
   const fetchAvailableUsers = async () => {
     try {
       const users = await getAvailableUsers();
-    
+
       setAvailableUsers(users);
     } catch (error) {
-      console.error('Error fetching available users:', error);
+      console.error("Error fetching available users:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -40,9 +43,9 @@ export const AuthProvider = ({ children }) => {
       const userData = await loginUser(userId);
       setUser(userData);
       // Actualizar la lista de usuarios disponibles
-      setAvailableUsers(availableUsers.filter(u => u._id !== userId));
+      setAvailableUsers(availableUsers.filter((u) => u._id !== userId));
     } catch (error) {
-      console.error('Error logging in:', error);
+      console.error("Error logging in:", error);
     }
   };
 
@@ -55,13 +58,15 @@ export const AuthProvider = ({ children }) => {
         // Añadir el usuario de vuelta a la lista de disponibles
         setAvailableUsers([...availableUsers, user]);
       } catch (error) {
-        console.error('Error logging out:', error);
+        console.error("Error logging out:", error);
       }
     }
   };
 
   return (
-    <AuthContext.Provider value={{ user, availableUsers, login, logout }}>
+    <AuthContext.Provider
+      value={{ user, availableUsers, login, logout, loading }}
+    >
       {children}
     </AuthContext.Provider>
   );

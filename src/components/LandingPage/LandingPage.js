@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getComics } from '../../services/api';
 import ComicCard from '../ComicCard/ComicCard';
 import './LandingPage.css';
+import Loader from '../Loader/Loader';
 
 function LandingPage() {
   const [comics, setComics] = useState([]);
@@ -15,6 +16,10 @@ function LandingPage() {
     }
     fetchComics();
   }, []);
+
+  if  (!comics.length) {
+    return <Loader/>
+  }
 
   return (
     <div className="landing-page">

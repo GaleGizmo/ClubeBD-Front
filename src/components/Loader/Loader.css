@@ -1,0 +1,22 @@
+.loader-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Ajusta esto según tus necesidades */
+  }
+  
+  .loader {
+    width: 50%;
+    
+    animation: grow-shrink 1.5s infinite;
+  }
+  
+  @keyframes grow-shrink {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.5);
+    }
+  }
+  
