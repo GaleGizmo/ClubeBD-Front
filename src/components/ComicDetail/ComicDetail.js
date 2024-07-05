@@ -30,11 +30,13 @@ function ComicDetail() {
     return new Date(dateString).getFullYear();
   }
 
-  if (!comic) return <Loader/>
+  if (!comic) return <Loader />;
 
   return (
     <div className="comic-detail">
-      <div className="title-container"><h1>{comic.title}</h1> </div>
+      <div className="title-container">
+        <h1>{comic.title}</h1>{" "}
+      </div>
       <div className="comic-content">
         <span className="back-button" onClick={() => navigate(-1)}>
           <TiArrowBackOutline />{" "}
@@ -74,10 +76,10 @@ function ComicDetail() {
             {getYear(comic.published_date)}
           </h3>
           <h3>
-          <span className="tag"> Xéneros:</span>{" "}
-              {Array.isArray(comic.genres)
-                ? comic.genres.join(", ")
-                : comic.genres}
+            <span className="tag"> Xéneros:</span>{" "}
+            {Array.isArray(comic.genres)
+              ? comic.genres.join(", ")
+              : comic.genres}
           </h3>
           <h3>
             <span className="tag">Páxinas:</span> {comic.pages}

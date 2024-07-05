@@ -31,7 +31,7 @@
 }
 .comic-detail h1 {
   position: fixed;
-  top: 10px;
+  top: 50px;
   left: 50%;
   transform: translateX(-50%);
   padding: 0 10px 7px 10px;
@@ -108,6 +108,8 @@
   .comic-content {
     flex-direction: column;
     align-items: center;
+    margin-top: 50px;
+        gap: 10px;
   }
 
   .comic-cover img {
@@ -146,6 +148,7 @@
   .comic-content {
     flex-direction: column;
     align-items: center;
+    margin-top: 50px;
   }
 
   .comic-cover img {
