@@ -91,7 +91,7 @@ function RatingSystem({ comicId, userId, initialRating, numberOfVotes }) {
           Puntuación: <span className="vote-container vote-figure">{rating.toFixed(1)}</span> <small>({numberOfVotes} votos)</small>
         </p>
         {yourVote !== null ? (
-          <p>Teu voto: <span className={yourVote > 0 ? "yes-read" : "no-read"}>{yourVote > 0 ? yourVote : "Non lido"}</span></p>
+          <p>O teu voto: <span className={yourVote > 0 ? "yes-read" : "no-read"}>{yourVote > 0 ? yourVote : "Non lido"}</span></p>
         ) : (
           <p className="no-read">Non votado</p>
         )}{" "}

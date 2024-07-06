@@ -66,7 +66,7 @@ function ComicDetail() {
             </h2>
           )}
           <h3>
-            <span className="tag">Tit. orix. :</span> {comic.original_title}
+            <span className="tag">Tít. orix. :</span> {comic.original_title}
           </h3>
           <h3>
             <span className="tag">Editor:</span> {comic.publisher}
