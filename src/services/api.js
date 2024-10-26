@@ -11,13 +11,18 @@ export const APIHeaders = {
   };
 
 export const api = axios.create({
-  baseURL: process.env.REACT_APP_URL,
+  baseURL: process.env.REACT_APP_API_URL,
   headers: APIHeaders,
 });
 
 export const getComics = async (season) => {
-  const response = await api.get('/comics/'+season);
-  return response.data;
+  try {
+    const response = await api.get(`/comics/${season}`);
+    console.log(response.data);
+    return response.data;
+  } catch (err) {
+    console.error("Error al recuperar los cómics:", err);
+  }
 };
 
 export const getComicDetails = async (comicId) => {
