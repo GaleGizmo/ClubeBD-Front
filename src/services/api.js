@@ -11,7 +11,7 @@ export const APIHeaders = {
   };
 
 export const api = axios.create({
-  baseURL: process.env.REACT_APP_LOCAL_URL,
+  baseURL: process.env.REACT_APP_URL,
   headers: APIHeaders,
 });
 
