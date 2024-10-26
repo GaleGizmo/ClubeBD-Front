@@ -11,27 +11,27 @@ export const APIHeaders = {
   };
 
 export const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL,
+  baseURL: process.env.REACT_APP_LOCAL_URL,
   headers: APIHeaders,
 });
 
-export const getComics = async () => {
-  const response = await api.get('/comics');
+export const getComics = async (season) => {
+  const response = await api.get('/comics/'+season);
   return response.data;
 };
 
 export const getComicDetails = async (comicId) => {
-  const response = await api.get(`/comics/${comicId}`);
+  const response = await api.get(`/comics/details/${comicId}`);
   return response.data;
 };
 
 export const rateComic = async (comicId, userId, rating) => {
-  const response = await api.post(`/comics/${comicId}/rate`, { userId, rating });
+  const response = await api.post(`/comics/details/${comicId}/rate`, { userId, rating });
   return response.data;
 };
 
 export const updateRating = async (comicId, userId, rating) => {
-  const response = await api.put(`/comics/${comicId}/rate`, { userId, rating });
+  const response = await api.put(`/comics/details/${comicId}/rate`, { userId, rating });
   return response.data;
 };
 

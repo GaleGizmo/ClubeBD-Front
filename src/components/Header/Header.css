@@ -1,0 +1,40 @@
+header  {
+    width: 100%;
+    background-color: #f1c40f;
+    position: fixed;
+    top: 0;
+    z-index: 2;
+    text-align: center;
+    padding-bottom: 10px;
+  }
+.seasons-dropdown{
+    position: fixed;
+    top: 15px;
+    right: 15%;
+    font-weight: bold;
+    font-size: 18px;
+}
+.seasons-dropdown select{
+    border-radius: 20%;
+    font-size: 14px;
+}
+.seasons-dropdown option {
+    font-size: 14px;
+}
+  @media screen and (max-width: 767px) {
+ header > h1{
+    font-size: 18px;
+    padding: 10px;
+ }
+
+ .seasons-dropdown{
+    display: flex;
+    flex-direction: column;
+    top: 5px;
+    font-size: 14px;
+ }
+ .seasons-dropdown select, option {
+    font-size: 10px;
+ }
+
+}

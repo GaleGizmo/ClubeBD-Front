@@ -1,6 +1,6 @@
 .comic-detail {
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 55px auto 0 auto;
   padding: 40px 20px;
 }
 
@@ -22,7 +22,7 @@
 }
 .title-container{
   position: fixed;
-  top:0;
+  top:53px;
   left:0;
   z-index: 2;
   width: 100%;
@@ -31,7 +31,7 @@
 }
 .comic-detail h1 {
   position: fixed;
-  top: 10px;
+  top: 63px;
   left: 50%;
   transform: translateX(-50%);
   padding: 0 10px 7px 10px;
@@ -90,16 +90,20 @@
 /* Estilos para dispositivos móviles */
 @media (max-width: 767px) {
   .comic-detail {
-    padding: 20px 10px;
+    padding: 10px;
   }
-
+  .title-container{
+    height: 55px;}
+  .comic-cover{
+    width: 90%;
+  }
   .back-button {
     top: 0px;
     left: 5px;
   }
 
   .comic-detail h1 {
-    top: 25px;
+    top: 63px;
     width: 70%;
     font-size: 1em;
     padding: 1px 0 3px 0;
@@ -108,7 +112,7 @@
   .comic-content {
     flex-direction: column;
     align-items: center;
-    margin-top: 50px;
+    margin-top: 70px;
         gap: 10px;
   }
 
