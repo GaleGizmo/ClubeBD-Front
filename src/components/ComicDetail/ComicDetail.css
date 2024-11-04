@@ -8,13 +8,7 @@
   color: #857777;
 }
 
-.back-button {
-  font-size: 2em;
-  position: fixed;
-  top: 10px;
-  left: 10px;
-  z-index: 1000;
-}
+
 
 .back-button:hover {
   cursor: pointer;
@@ -85,6 +79,8 @@
 .comic-info > p {
   margin-bottom: 15px;
   line-height: 1.5;
+  max-height: 120px;
+  overflow-y: auto;
 }
 
 /* Estilos para dispositivos móviles */
@@ -97,10 +93,7 @@
   .comic-cover{
     width: 90%;
   }
-  .back-button {
-    top: 0px;
-    left: 5px;
-  }
+ 
 
   .comic-detail h1 {
     top: 63px;

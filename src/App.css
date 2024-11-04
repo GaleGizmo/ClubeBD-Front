@@ -2,10 +2,7 @@
   margin: 0;
   padding: 0;
 }
-.App nav{
-    position: relative;
-    padding: 0 10px;
-}
+
 .logout-button{
     font-size: 2em;
     z-index: 3;
@@ -20,9 +17,23 @@
   cursor: pointer;
   transform: scale(1.1);
 }
+.back-button {
+  font-size: 2em;
+  position: fixed;
+  top: 57px;
+  left: 10px;
+  z-index: 1000;
+}
 /* Estilos para dispositivos móviles */
 @media (max-width: 767px) {
   .logout-button{
     top: 5px;
-  }}
+    font-size: 1.4em;
+  }
+  .back-button {
+    
+    left: 5px;
+    font-size: 1.4em;
+  }
+}
  

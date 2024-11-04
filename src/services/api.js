@@ -9,10 +9,19 @@ export const APIHeaders = {
     "Access-Control-Allow-Origin": "*",
    
   };
-
+export const APIHeaders2={
+  Accept: "application/json",
+  "Content-Type": "multipart/form-data",
+  "Access-Control-Allow-Origin": "*",
+}
 export const api = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
   headers: APIHeaders,
+});
+
+export const api2 = axios.create({
+  baseURL: process.env.REACT_APP_API_URL,
+  headers: APIHeaders2,
 });
 
 export const getComics = async (season) => {
@@ -22,9 +31,18 @@ export const getComics = async (season) => {
     return response.data;
   } catch (err) {
     console.error("Error al recuperar los cómics:", err);
+    return err.response.status
   }
 };
-
+export const addComic = async (comicData) => {
+  try {
+    
+    const response = await api2.post('/comics/add-comic', comicData);
+    return response.data;
+  } catch (err) {
+    console.error("Error al añadir el cómic:", err);
+  }
+};
 export const getComicDetails = async (comicId) => {
   const response = await api.get(`/comics/details/${comicId}`);
   return response.data;

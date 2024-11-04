@@ -9,6 +9,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 import Header from "./components/Header/Header";
+import AddComicForm from "./components/AddComic/AddComicForm";
 
 function AuthenticatedApp() {
   const { user, logout } = useAuth();
@@ -25,6 +26,7 @@ function AuthenticatedApp() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/comic/:id" element={<ComicDetail />} />
         <Route path="/past-comics/:season" element={<LandingPage />} />
+        <Route path="/add-comic" element={<AddComicForm/>} />
       </Routes>
     </div>
   );

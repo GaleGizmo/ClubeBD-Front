@@ -32,6 +32,8 @@
 }
 .add-comment-form {
   margin-top: 20px;
+  padding: 10px;
+    max-width: unset;
 }
 .add-comment-form > textarea {
   width: 100%;

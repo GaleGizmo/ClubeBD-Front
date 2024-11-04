@@ -20,7 +20,7 @@ function ComicDetail() {
     const fetchData = async () => {
       const comicData = await getComicDetails(id);
       setComic(comicData);
-    
+      console.log(comicData);
       const commentsData = await getComments(id);
       setComments(commentsData.comments);
     };

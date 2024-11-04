@@ -8,6 +8,7 @@
     box-sizing: border-box;
     border-radius: 8px;
     box-shadow: 4px 4px 8px rgba(0,0,0,0.4);
+    position: relative;
   }
   
   .comic-cover-container {
@@ -66,12 +67,10 @@
   box-orient: vertical;
   }
   
-  /* .comic-card p {
-    margin: 0;
-    font-size: 0.9em;
-  } */
+  
 
   .vote-container {
+    
     margin: 0 auto;
     width: 30px;               
     height: 30px;              
@@ -86,7 +85,14 @@
     color: black;              
 }
 
-  
+  .creator-container{
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    font-size: small;
+    font-style: italic;
+    color: #ff7f50;
+  }
   /* La animación flip-vertical-left se mantiene igual */
   
   /* La animación flip-vertical-left se mantiene igual */

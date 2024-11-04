@@ -1,7 +1,7 @@
 /* Estilos base (para todas las pantallas) */
 .comics-grid {
   width: 90%;
-  margin: 60px auto 0;
+  margin: 70px auto 0;
   display: grid;
   gap: 20px;
   justify-content: center;
