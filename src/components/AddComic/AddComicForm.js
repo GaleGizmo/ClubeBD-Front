@@ -7,6 +7,7 @@ import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
 import { TiArrowBackOutline } from "react-icons/ti";
 import { useNavigate } from "react-router-dom";
 
+
 const AddComicForm = () => {
   const user = JSON.parse(localStorage.getItem("user"))
   
@@ -17,7 +18,7 @@ const AddComicForm = () => {
     artists: [""],
     colorists: [""],
     publisher: "",
-    published_date: "",
+    published_date: "2000-01-01",
     genres: [""],
     cover: null,
     synopsis: "",
@@ -33,14 +34,75 @@ const AddComicForm = () => {
   const [coverPreview, setCoverPreview] = useState(null);
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [cleanedData, setCleanedData] = useState(null);
+
+  const validateDate = (dateString) => {
+    const selectedDate = new Date(dateString);
+    const today = new Date();
+    
+    // Resetear las horas para comparar solo las fechas
+    today.setHours(0, 0, 0, 0);
+    selectedDate.setHours(0, 0, 0, 0);
+    
+    // Comprobar que es una fecha válida y no es futura
+    if (!(selectedDate instanceof Date && !isNaN(selectedDate))) {
+      return { isValid: false, error: "Por favor, introduce unha data válida" };
+    }
+    
+    if (selectedDate > today) {
+      return { isValid: false, error: "A data non pode ser posterior á actual" };
+    }
+    
+    return { isValid: true, error: null };
+  };
+
+  const cleanData = (data) => {
+    const cleaned = { ...data };
+    
+    // Limpiar arrays opcionales
+    ['colorists', 'genres'].forEach(field => {
+      if (cleaned[field].length === 1 && cleaned[field][0] === '') {
+        delete cleaned[field];
+      } else if (cleaned[field].length > 0) {
+        cleaned[field] = cleaned[field].filter(item => item.trim() !== '');
+        if (cleaned[field].length === 0) {
+          delete cleaned[field];
+        }
+      }
+    });
+
+    // Eliminar campos opcionales vacíos
+    if (!cleaned.pages || cleaned.pages === '') {
+      delete cleaned.pages;
+    }
+
+    return cleaned;
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    
+    // Validación especial para la fecha
+    if (name === 'published_date') {
+      if (!validateDate(value)) {
+        setError(prev => ({
+          ...prev,
+          published_date: "Por favor, introduce unha data válida"
+        }));
+      } else {
+        setError(prev => ({
+          ...prev,
+          published_date: null
+        }));
+      }
+    }
+    
     setComicData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
-    if (value) {
+    
+    if (value && name !== 'published_date') {
       setError((prevErrors) => ({
         ...prevErrors,
         [name]: null,
@@ -121,7 +183,14 @@ const AddComicForm = () => {
       "publisher",
       "published_date",
       "synopsis",
+      "club_season"
     ];
+    if (comicData.published_date) {
+      const dateValidation = validateDate(comicData.published_date);
+      if (!dateValidation.isValid) {
+        newErrors.published_date = dateValidation.error;
+      }
+    }
     requiredFields.forEach((field) => {
       if (!comicData[field]) {
         newErrors[field] = "Este campo é obrigatorio.";
@@ -151,6 +220,8 @@ const AddComicForm = () => {
     // Validar todos los campos obligatorios antes de abrir el modal
 
     if (validateFields()) {
+      const cleaned = cleanData(comicData);
+      setCleanedData(cleaned);
       setIsModalOpen(true);
     }
   };
@@ -158,17 +229,18 @@ const AddComicForm = () => {
   const confirmSubmit = async () => {
     try {
       const formData = new FormData();
-      Object.keys(comicData).forEach((key) => {
-        if (Array.isArray(comicData[key])) {
-          comicData[key].forEach((value) => formData.append(key, value));
+      Object.keys(cleanedData).forEach((key) => {
+        if (Array.isArray(cleanedData[key])) {
+          cleanedData[key].forEach((value) => formData.append(key, value));
         } else {
-          formData.append(key, comicData[key]);
+          formData.append(key, cleanedData[key]);
         }
       });
 
       const response = await addComic(formData);
       toast.success(response.message);
       setComicData(initialData);
+      setCleanedData(null)
       setCoverPreview(null);
       setError({});
       setIsModalOpen(false);
@@ -366,13 +438,14 @@ const AddComicForm = () => {
         <div>
           <label>Data de Publicación: <span style={{color:"red"}}>*</span></label>
           <input
-            type="date"
-            name="published_date"
-            value={comicData.published_date}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            required
-          />
+          type="date"
+          name="published_date"
+          value={comicData.published_date}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          required
+          max={new Date().toISOString().split('T')[0]} // Impide seleccionar fechas futuras
+        />
           {error?.published_date && (
             <p className="error">{error.published_date}</p>
           )}
@@ -451,16 +524,33 @@ const AddComicForm = () => {
             onChange={handleChange}
           />
         </div>
-
+        <div>
+        <label>Tempada do Clube: <span style={{color:"red"}}>*</span></label>
+        <select
+          name="club_season"
+          value={comicData.club_season}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          className="form-select"
+          required
+        >
+          <option value="libre">Libre</option>
+          <option value="24-25">24-25</option>
+        </select>
+        {error?.club_season && (
+            <p className="error">{error.club_season}</p>
+          )}
+      </div>
         <button className="form-button submit" onClick={handleSubmit}>
           Engadir Cómic
         </button>
       </form>
       <ConfirmationModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {setIsModalOpen(false);
+         setCleanedData(null)}}
         onConfirm={confirmSubmit}
-        comicData={comicData}
+        comicData={cleanedData}
         coverPreview={coverPreview}
       />
     </>

@@ -13,7 +13,13 @@ form {
 form div {
   margin-bottom: 15px;
 }
-
+.form-select {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
 form label {
   display: block;
   font-weight: bold;

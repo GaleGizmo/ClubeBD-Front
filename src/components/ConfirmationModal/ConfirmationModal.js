@@ -29,9 +29,9 @@ console.log(comicData)
             <p>
               <strong>Debuxo:</strong> {comicData.artists.join(', ')}
             </p>
-            <p>
+            {comicData.colorist && <p>
               <strong>Cor:</strong> {comicData.colorists.join(', ')}
-            </p>
+            </p>}
             <p>
               <strong>Editorial:</strong> {comicData.publisher}
             </p>
@@ -39,9 +39,9 @@ console.log(comicData)
             <p>
               <strong>Data Publicación:</strong> {comicData.published_date}
             </p>
-            <p>
+            {comicData.genres && <p>
               <strong>Xénero:</strong> {comicData.genres}
-            </p>
+            </p>}
             <p><strong>Portada: </strong>{coverPreview ? (<p><img
               src={coverPreview}
               alt="Cover Preview"
@@ -52,8 +52,11 @@ console.log(comicData)
             <p>
               <strong>Sinopsis:</strong> {comicData.synopsis}
             </p>
-            <p>
+            {comicData.pages && <p>
               <strong>Páxinas:</strong> {comicData.pages}
+            </p>}
+            <p>
+              <strong>Tempada:</strong> {comicData.club_season}
             </p>
           </div>
           <div className="modal-buttons">
