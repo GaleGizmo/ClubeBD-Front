@@ -38,7 +38,18 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const login = async (userId) => {
+  const login = async (username, password) => {
+    try {
+      const userData = await login(username, password);
+      setUser(userData.user);
+      localStorage.setItem("ClubeBDtoken", userData.token);
+    }
+    catch (error) {
+      console.error("Error logging in:", error);
+    }
+  };
+
+  const userLogin = async (userId) => {
     try {
       const userData = await loginUser(userId);
       setUser(userData);
@@ -52,7 +63,7 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     if (user) {
       try {
-        console.log(user);
+       
         await logoutUser(user._id);
         setUser(null);
         // Añadir el usuario de vuelta a la lista de disponibles
@@ -65,7 +76,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, availableUsers, login, logout, loading }}
+      value={{ user, availableUsers, userLogin, login, logout, loading }}
     >
       {children}
     </AuthContext.Provider>

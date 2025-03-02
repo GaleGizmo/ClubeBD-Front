@@ -2,23 +2,24 @@ import React  from "react";
 import { useAuth } from "../../context/AuthContext";
 import "./UserSelect.css";
 import Loader from "../Loader/Loader";
+import Login from "../Login/Login";
 
 function UserSelect() {
-  const { availableUsers, login, loading } = useAuth();
+  const { availableUsers, userLogin, loading } = useAuth();
   
 
   
 
   const handleUserSelect = (userId) => {
-    login(userId);
+    userLogin(userId);
   };
   if (loading) {
     return <Loader/>
   }
   return (
-    <div>
-      {availableUsers.length > 0 ? (
-        <div className="user-select">
+    <div className="user-select">
+      {availableUsers.length > 0 && (
+        <div >
           <h2>Elixe o teu usuario:</h2>
           <ul>
             {availableUsers.map((user) => (
@@ -33,9 +34,8 @@ function UserSelect() {
             ))}
           </ul>
         </div>
-      ) : (
-        <div className="user-select no-users">Non hai usuarios dispoñibles</div>
-      )}
+      ) }
+      <Login />
     </div>
   );
 }

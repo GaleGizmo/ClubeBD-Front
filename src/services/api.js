@@ -92,8 +92,12 @@ export const getAvailableUsers = async () => {
   };
   
   export const loginUser = async (userId) => {
-    const response = await api.post('/users/login', { userId });
+    const response = await api.post('/users/userlogin', { userId });
     return response.data.user;
+  };
+  export const login = async (username, password) => {
+    const response = await api.post('/users/login', { username, password });
+    return response.data;
   };
   
   export const logoutUser = async (userId) => {
