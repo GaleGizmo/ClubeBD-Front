@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 
 const AddComicForm = () => {
-  const user = JSON.parse(localStorage.getItem("user"))
+ 
   
   const initialData = {
     title: "",
@@ -24,7 +24,7 @@ const AddComicForm = () => {
     synopsis: "",
     pages: "",
     club_season: "libre",
-    created_by: user._id,
+    created_by: null,
     average_rating: 0,
     ratings: [],
     comments_count: 0,
@@ -244,6 +244,7 @@ const AddComicForm = () => {
       setCoverPreview(null);
       setError({});
       setIsModalOpen(false);
+      navigate("/comic/" + response.newComic._id); // Redirigir al usuario a la página del cómic recién creado"); 
     } catch (err) {
       toast.error("Error ao engadir o cómic");
     }

@@ -4,7 +4,7 @@
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 8px;
-  background-color: moccasin;
+  background-color: #f1c40f;
 }
 .comment-section > h3 {
   background-color: coral;
@@ -31,9 +31,13 @@
   margin-bottom: 2px;
 }
 .add-comment-form {
-  margin-top: 20px;
+  margin-top: 0;
+  margin-bottom: 0;
   padding: 10px;
     max-width: unset;
+}
+.edit-comment-form {
+  box-shadow: none;
 }
 .add-comment-form > textarea {
   width: 100%;
@@ -41,23 +45,64 @@
   padding: 7px;
   box-sizing: border-box;
 }
-.delete-comment {
+.delete-edit-icon {
+  color: #FF7F50;
+  font-size: 1.5rem;
+  margin-left: 5px;
+  background-color: transparent;
+  border: none;
+}
+.comment-actions {
   position: absolute;
-  right: 2px;
-  bottom: 2px;
+  right: 5px;
+  bottom: 0;
   display: flex;
-  font-size: 1.2em;
+  margin-bottom: 0;
   border: none;
 
   background-color: transparent
 }
-.delete-comment:hover{
+.delete-edit-icon:hover{
     cursor: pointer;
     transform: scale(1.1);
+}
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.comment-textarea {
+  flex: 1;
+  padding-right: 40px; /* espacio para el icono */
+  resize: none;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.send-icon-button {
+  position: absolute;
+  right: 10px;
+  bottom: 3px;
+  background: none;
+  border: none;
+  color: #FF7F50;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.send-icon-button:hover {
+  color: #E1724A;
 }
 /* Estilos para dispositivos móviles */
 @media (max-width: 767px) {
   .comment-section {
    width: 90%;
+  }
+  .send-icon-button {
+    font-size: 1rem;
+  }
+  .delete-edit-icon {
+    font-size: 1.2rem;
   }
 }

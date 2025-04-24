@@ -15,19 +15,42 @@ export const APIHeaders2={
   "Access-Control-Allow-Origin": "*",
 }
 export const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL,
+  baseURL: process.env.REACT_APP_API_URL_LOCAL,
   headers: APIHeaders,
 });
 
 export const api2 = axios.create({
-  baseURL: process.env.REACT_APP_API_URL,
+  baseURL: process.env.REACT_APP_API_URL_LOCAL,
   headers: APIHeaders2,
 });
-
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("ClubeBDtoken");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+api2.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("ClubeBDtoken");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 export const getComics = async (season) => {
   try {
     const response = await api.get(`/comics/${season}`);
-    console.log(response.data);
+    
     return response.data;
   } catch (err) {
     console.error("Error al recuperar los cómics:", err);
@@ -48,13 +71,13 @@ export const getComicDetails = async (comicId) => {
   return response.data;
 };
 
-export const rateComic = async (comicId, userId, rating) => {
-  const response = await api.post(`/comics/details/${comicId}/rate`, { userId, rating });
+export const rateComic = async (comicId,  rating) => {
+  const response = await api.post(`/comics/details/${comicId}/rate`, {  rating });
   return response.data;
 };
 
-export const updateRating = async (comicId, userId, rating) => {
-  const response = await api.put(`/comics/details/${comicId}/rate`, { userId, rating });
+export const updateRating = async (comicId,  rating) => {
+  const response = await api.put(`/comics/details/${comicId}/rate`, {  rating });
   return response.data;
 };
 
@@ -65,8 +88,8 @@ export const getUserRatings = async (userId) => {
   return response.data;
 };
 
-export const addComment = async (comicId, userId, commentText) => {
-  const response = await api.post(`/comments/${comicId}`, { userId, commentText });
+export const addComment = async (comicId,  commentText) => {
+  const response = await api.post(`/comments/${comicId}`, {  commentText });
   return response.data;
 };
 
@@ -75,8 +98,8 @@ export const getComments = async (comicId) => {
   return response.data;
 };
 
-export const updateComment = async (commentId, userId, commentText) => {
-  const response = await api.put(`/comments/${commentId}`, { userId, commentText });
+export const updateComment = async (commentId,  commentText) => {
+  const response = await api.put(`/comments/${commentId}`, {  commentText });
   return response.data;
 };
 
@@ -95,7 +118,7 @@ export const getAvailableUsers = async () => {
     const response = await api.post('/users/userlogin', { userId });
     return response.data.user;
   };
-  export const login = async (username, password) => {
+  export const doLogin = async (username, password) => {
     const response = await api.post('/users/login', { username, password });
     return response.data;
   };
@@ -104,3 +127,15 @@ export const getAvailableUsers = async () => {
     const response = await api.post('/users/logout', { userId });
     return response.data.user;
   };
+
+  export const addPasswordToExistingUser = async (userId, password, username) => {
+    try {
+      const response = await api.patch('/users/updateuser', { userId, password, username });
+      
+      return response.data;
+    } catch (error) {
+      const errorMsg = error.response?.data?.message || error.message || "Erro descoñecido";
+      console.error("Error ao engadir contrasinal:", errorMsg);
+      throw new Error(errorMsg);
+    }
+  }

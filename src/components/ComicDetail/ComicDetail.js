@@ -19,8 +19,7 @@ function ComicDetail() {
   useEffect(() => {
     const fetchData = async () => {
       const comicData = await getComicDetails(id);
-      setComic(comicData);
-      console.log(comicData);
+      setComic(comicData);     
       const commentsData = await getComments(id);
       setComments(commentsData.comments);
     };
@@ -35,9 +34,9 @@ function ComicDetail() {
 
   return (
     <div className="comic-detail">
-      <div className="title-container">
+      {/* <div className="title-container">
         <h1>{comic.title}</h1>{" "}
-      </div>
+      </div> */}
       <div className="comic-content">
         <span className="back-button" onClick={() => navigate(-1)}>
           <TiArrowBackOutline />{" "}

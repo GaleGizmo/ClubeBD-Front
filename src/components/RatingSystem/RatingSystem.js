@@ -51,14 +51,19 @@ function RatingSystem({ comicId, userId, initialRating, numberOfVotes }) {
 
   const handleRating = async () => {
     try {
-      const response = await rateComic(comicId, userId, newRating);
+      if (yourVote !== null) {
+        const updateResponse = await updateRating(comicId,  newRating);
+          setRating(updateResponse.average_rating);
+          toast.success("Voto modificado!");}
+          else {
+      const response = await rateComic(comicId,  newRating);
       setRating(response.average_rating);
-      toast.success("Voto engadido!");
+      toast.success("Voto engadido!");}
     } catch (error) {
       if (error.response && error.response.status === 400) {
         // El usuario ya ha votado, intenta actualizar
         try {
-          const updateResponse = await updateRating(comicId, userId, newRating);
+          const updateResponse = await updateRating(comicId,  newRating);
           setRating(updateResponse.average_rating);
           toast.success("Voto modificado!");
         } catch (updateError) {

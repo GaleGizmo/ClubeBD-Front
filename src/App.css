@@ -2,6 +2,10 @@
   margin: 0;
   padding: 0;
 }
+a	{
+  text-decoration: none;
+  color: inherit;
+}
 
 .logout-button{
     font-size: 2em;
@@ -17,12 +21,26 @@
   cursor: pointer;
   transform: scale(1.1);
 }
+.modal{
+  background-color:  #bf9c10;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 500px;
+    margin: auto;
+    text-align: center;
+    height: fit-content;
+    max-height: 90%;
+    overflow-y: auto;
+}
 .back-button {
   font-size: 2em;
   position: fixed;
-  top: 57px;
+  top: 10px;
   left: 10px;
   z-index: 1000;
+}
+.Toastify__toast-container {
+  z-index: 9999 !important;
 }
 /* Estilos para dispositivos móviles */
 @media (max-width: 767px) {
@@ -34,6 +52,9 @@
     
     left: 5px;
     font-size: 1.4em;
+  }
+  .modal{
+    padding: 10px;
   }
 }
  

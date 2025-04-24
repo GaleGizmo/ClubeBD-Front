@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
-import { getAvailableUsers, loginUser, logoutUser } from "../services/api";
+import { doLogin, getAvailableUsers, loginUser,  } from "../services/api";
+
 
 const AuthContext = createContext(null);
 
@@ -9,6 +10,7 @@ export const AuthProvider = ({ children }) => {
     const savedUser = localStorage.getItem("user");
     return savedUser ? JSON.parse(savedUser) : null;
   });
+  
   const [availableUsers, setAvailableUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -40,8 +42,9 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (username, password) => {
     try {
-      const userData = await login(username, password);
+      const userData = await doLogin(username, password);
       setUser(userData.user);
+      setAvailableUsers(availableUsers.filter((u) => u._id !== userData.user._id));
       localStorage.setItem("ClubeBDtoken", userData.token);
     }
     catch (error) {
@@ -64,10 +67,13 @@ export const AuthProvider = ({ children }) => {
     if (user) {
       try {
        
-        await logoutUser(user._id);
+        // await logoutUser(user._id);
         setUser(null);
+        localStorage.removeItem("ClubeBDtoken");
+        localStorage.removeItem("user");
+       
         // Añadir el usuario de vuelta a la lista de disponibles
-        setAvailableUsers([...availableUsers, user]);
+        // setAvailableUsers([...availableUsers, user]);
       } catch (error) {
         console.error("Error logging out:", error);
       }

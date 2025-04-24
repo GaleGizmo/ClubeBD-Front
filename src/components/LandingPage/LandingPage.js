@@ -1,12 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { getComics } from "../../services/api";
 import ComicCard from "../ComicCard/ComicCard";
 import "./LandingPage.css";
 import Loader from "../Loader/Loader";
 import { useParams } from "react-router-dom";
+import RadialSortButton from "../RadialSortButton/RadialSortButton";
+import { stripArticle } from "../../utils/stripArticle";
+
 
 function LandingPage() {
   const [comics, setComics] = useState([]);
+  const [sortBy, setSortBy] = useState("rating");
   const [noComicsMessage, setNoComicsMessage] = useState(false);
   const { season } = useParams();
 
@@ -16,14 +20,22 @@ function LandingPage() {
       if (fetchedComics === 404) {
         setNoComicsMessage(true);
       } else {
-      const sortedComics = fetchedComics.sort((a, b) => b.rating - a.rating);
-      setComics(sortedComics)
-      setNoComicsMessage(false);}
+        const sortedComics = fetchedComics.sort((a, b) => b.rating - a.rating);
+        setComics(sortedComics);
       
+        setNoComicsMessage(false);
+      }
     }
     fetchComics();
   }, [season]);
-
+  const sortedComics = useMemo(() => {
+    return [...comics].sort((a, b) => {
+      if (sortBy === "rating") return b.average_rating - a.average_rating;
+      if (sortBy === "title") return  stripArticle(a.title).localeCompare(stripArticle(b.title), 'es', { sensitivity: 'base' })
+      if (sortBy === "date") return new Date(b.addingDate) - new Date(a.addingDate);
+      return 0;
+    });
+  }, [comics, sortBy]);
   if (!comics.length) {
     return <Loader />;
   }
@@ -32,13 +44,14 @@ function LandingPage() {
     <div className="landing-page">
       {!noComicsMessage ? (
         <div className="comics-grid">
-          {comics.map((comic) => (
+          {sortedComics.map((comic) => (
             <ComicCard key={comic._id} comic={comic} season={season} />
           ))}
         </div>
       ) : (
         <div className="user-select no-users">Non hai cómics dispoñibles</div>
       )}
+      <RadialSortButton onSortChange={setSortBy} activeSort={sortBy}/>
     </div>
   );
 }

@@ -5,7 +5,7 @@ form {
   padding: 20px;
   border-radius: 10px;
   max-width: 600px;
- 
+ margin: 80px auto;
   color: white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
@@ -162,14 +162,7 @@ textarea:focus {
   font-size: 0.9em;
   margin-top: 5px;
 }
-.modal {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  max-width: 500px;
-  margin: auto;
-  text-align: center;
-}
+
 .preview-data {
   max-height: 60vh;
   overflow-y: auto;

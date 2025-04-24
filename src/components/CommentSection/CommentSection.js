@@ -1,13 +1,22 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useAuth } from "../../context/AuthContext";
-import { getComments, addComment, deleteComment } from "../../services/api";
-import { AiFillDelete } from "react-icons/ai";
-
+import {
+  getComments,
+  addComment,
+  deleteComment,
+  updateComment,
+} from "../../services/api";
+import { AiFillDelete, AiFillEdit, AiFillStop } from "react-icons/ai";
+import { FaPaperPlane } from "react-icons/fa";
+import TextareaAutosize from "react-textarea-autosize";
 import "./CommentSection.css";
+import { toast } from "react-toastify";
 
 function CommentSection({ comicId }) {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
+  const [commentId, setCommentId] = useState(null);
   const { user } = useAuth();
 
   const fetchComments = useCallback(async () => {
@@ -24,22 +33,42 @@ function CommentSection({ comicId }) {
   }, [fetchComments]);
 
   const handleAddComment = async (e) => {
-    if (e.type === "keypress" && e.key !== "Enter") return;
     e.preventDefault();
-    if (!newComment.trim()) return;
+    if (!newComment.trim()) {
+      toast.error("O texto do comentario está vacío.");
+      return;}
 
     try {
-      await addComment(comicId, user._id, newComment);
+      if (isEditing) {
+        await updateComment(commentId, newComment);
+        setIsEditing(false);
+        setCommentId(null);
+        toast.success("Comentario editado");
+      } else {
+        await addComment(comicId, newComment);
+        toast.success("Comentario engadido");
+      }
       setNewComment("");
       fetchComments();
     } catch (error) {
       console.error("Error adding comment:", error);
     }
   };
+  const handleEditComment = (comment) => {
+    setIsEditing(true);
+    setNewComment(comment.comment_text);
 
+    setCommentId(comment._id);
+  };
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+    setNewComment("");
+    setCommentId(null);
+  };
   const handleDeleteComment = async (commentId) => {
     try {
       await deleteComment(commentId, user._id);
+      toast.success("Comentario eliminado");
       fetchComments();
     } catch (error) {
       console.error("Error deleting comment:", error);
@@ -51,27 +80,68 @@ function CommentSection({ comicId }) {
       <h3>Comentarios</h3>
       {comments.map((comment) => (
         <div key={comment._id} className="comment">
-          <p>{comment.comment_text}</p>
-          <small>
-            Por: {comment.username} el{" "}
-            {new Date(comment.created_at).toLocaleDateString()}
-          </small>
-          {user && user.username === comment.username && (
-            <button className="delete-comment" onClick={() => handleDeleteComment(comment._id)}>
-               <AiFillDelete />
-            </button>
+          {isEditing && commentId === comment._id ? (
+            <form className="add-comment-form edit-comment-form" onSubmit={handleAddComment}>
+              <div className="input-with-icon">
+                <TextareaAutosize
+                  className="comment-textarea"
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
+                />
+                 <div className="comment-actions">
+                <button  type="button" onClick={handleCancelEdit} className="delete-edit-icon">
+                  <AiFillStop />
+                </button>
+                <button type="submit" className="delete-edit-icon">
+                  <FaPaperPlane />
+                </button></div>
+              </div>
+            </form>
+          ) : (
+            <>
+              <p>{comment.comment_text}</p>
+              <small>
+                Por: {comment.username} o{" "}
+                {new Date(comment.created_at).toLocaleDateString()}
+              </small>
+              {user && user.username === comment.username && (
+                <div className="comment-actions">
+                  <button
+                    className="delete-edit-icon"
+                    onClick={() => handleEditComment(comment)}
+                  >
+                    <AiFillEdit />
+                  </button>
+                  <button
+                    className="delete-edit-icon"
+                    onClick={() => handleDeleteComment(comment._id)}
+                  >
+                    <AiFillDelete />
+                  </button>
+                </div>
+              )}{" "}
+            </>
           )}
         </div>
       ))}
-      {user && (
+
+      {user && !isEditing && (
         <form className="add-comment-form" onSubmit={handleAddComment}>
-        <textarea
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            onKeyPress={handleAddComment}
-            placeholder="Engade un comentario..."
-          ></textarea>
-          {/* <button type="submit">Comentar</button> */}
+          <div className="input-with-icon">
+            <TextareaAutosize
+              className="comment-textarea"
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              placeholder="Engade un comentario..."
+            />
+            <button
+              type="submit"
+              className="send-icon-button"
+              title="Enviar comentario"
+            >
+              <FaPaperPlane />
+            </button>
+          </div>
         </form>
       )}
     </div>

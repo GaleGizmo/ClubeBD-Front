@@ -8,17 +8,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 100;
 }
-.modal-content{
-    background-color:  #bf9c10;
-    padding: 20px;
-    border-radius: 8px;
-    max-width: 500px;
+.confirmation-modal-content{
+   
     width: 90%;
-    height: fit-content;
-    max-height: 90%;
-    overflow-y: scroll;
+    
 }
 .modal-data{
     display: flex;

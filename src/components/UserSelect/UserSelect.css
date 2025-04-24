@@ -18,7 +18,13 @@
     margin-top: 10px;
     
 }
-
+.user-list{
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
 .user-select h2{
     color: #3b3939;
     margin-bottom: 20px;
