@@ -15,12 +15,12 @@ export const APIHeaders2={
   "Access-Control-Allow-Origin": "*",
 }
 export const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL_LOCAL,
+  baseURL: process.env.REACT_APP_API_URL,
   headers: APIHeaders,
 });
 
 export const api2 = axios.create({
-  baseURL: process.env.REACT_APP_API_URL_LOCAL,
+  baseURL: process.env.REACT_APP_API_URL,
   headers: APIHeaders2,
 });
 api.interceptors.request.use(
