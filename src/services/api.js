@@ -139,3 +139,20 @@ export const getAvailableUsers = async () => {
       throw new Error(errorMsg);
     }
   }
+  export const fetchBookData = async (isbn) => {
+    try {
+      const response = await fetch(
+        `https://openlibrary.org/isbn/${isbn}.json`
+      );
+      if (!response.ok) {
+        console.warn("Non se atopou información para este ISBN.");
+        return null;
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Erro ao buscar datos:", error);
+      return null;
+    }
+  };
+  

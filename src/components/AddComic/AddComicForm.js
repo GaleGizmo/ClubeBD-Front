@@ -1,16 +1,14 @@
 import "./AddComicForm.css";
 import { useDropzone } from "react-dropzone";
-import React, { useState } from "react";
-import { addComic } from "../../services/api";
+import React, { useEffect, useState } from "react";
+import { addComic, fetchBookData } from "../../services/api";
 import { toast } from "react-toastify";
 import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
 import { TiArrowBackOutline } from "react-icons/ti";
 import { useNavigate } from "react-router-dom";
-
+import { Html5Qrcode } from "html5-qrcode";
 
 const AddComicForm = () => {
- 
-  
   const initialData = {
     title: "",
     original_title: "",
@@ -35,36 +33,107 @@ const AddComicForm = () => {
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [cleanedData, setCleanedData] = useState(null);
+  const [isScanning, setIsScanning] = useState(false);
 
+  useEffect(() => {
+    let html5QrCode;
+
+    if (isScanning) {
+      html5QrCode = new Html5Qrcode("reader");
+      const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+
+      html5QrCode
+        .start(
+          { facingMode: "environment" }, // usar cámara trasera si es móvil
+          config,
+          (decodedText, decodedResult) => {
+            console.log(`Código escaneado: ${decodedText}`);
+            // Aquí podríamos setear el título o algún campo
+            setComicData((prevData) => ({
+              ...prevData,
+              title: decodedText, // de momento lo ponemos en título
+            }));
+            setIsScanning(false); 
+          },
+          (errorMessage) => {
+            // puedes manejar errores de escaneo aquí si quieres
+            console.warn(`Erro de escaneo: ${errorMessage}`);
+          }
+        )
+        .catch((err) => {
+          console.error("Error al iniciar el escáner:", err);
+        });
+    }
+
+    return () => {
+      if (html5QrCode) {
+        html5QrCode
+          .stop()
+          .catch((err) => console.error("Error al parar:", err));
+      }
+    };
+  }, [isScanning]);
+  useEffect(() => {
+    const isISBN = /^[0-9]{10,13}$/.test(comicData.title); // Un ISBN suele tener 10 o 13 dígitos
+  
+    if (isISBN) {
+      fetchBookData(comicData.title).then((bookData) => {
+        if (bookData) {
+          // Actualizar los campos del formulario
+          setComicData((prev) => ({
+            ...prev,
+            title: bookData.title || prev.title,
+            authors: bookData.authors ? bookData.authors.map((a) => a.name) : prev.authors,
+            publisher: bookData.publishers ? bookData.publishers[0].name : prev.publisher,
+            published_date: bookData.publish_date ? formatDate(bookData.publish_date) : prev.published_date,
+            pages: bookData.number_of_pages || prev.pages,
+            // No siempre OpenLibrary da portada, pero podrías intentar cargarla también
+            cover: bookData.cover ? bookData.cover.large : null,
+          }));
+        }
+      });
+    }
+  }, [comicData.title]);
+  const formatDate = (publishedDate) => {
+    const parsedDate = Date.parse(publishedDate);
+    if (!isNaN(parsedDate)) {
+      return new Date(parsedDate).toISOString().split("T")[0]; // yyyy-mm-dd
+    }
+    return "";
+  };
+  
   const validateDate = (dateString) => {
     const selectedDate = new Date(dateString);
     const today = new Date();
-    
+
     // Resetear las horas para comparar solo las fechas
     today.setHours(0, 0, 0, 0);
     selectedDate.setHours(0, 0, 0, 0);
-    
+
     // Comprobar que es una fecha válida y no es futura
     if (!(selectedDate instanceof Date && !isNaN(selectedDate))) {
       return { isValid: false, error: "Por favor, introduce unha data válida" };
     }
-    
+
     if (selectedDate > today) {
-      return { isValid: false, error: "A data non pode ser posterior á actual" };
+      return {
+        isValid: false,
+        error: "A data non pode ser posterior á actual",
+      };
     }
-    
+
     return { isValid: true, error: null };
   };
 
   const cleanData = (data) => {
     const cleaned = { ...data };
-    
+
     // Limpiar arrays opcionales
-    ['colorists', 'genres'].forEach(field => {
-      if (cleaned[field].length === 1 && cleaned[field][0] === '') {
+    ["colorists", "genres"].forEach((field) => {
+      if (cleaned[field].length === 1 && cleaned[field][0] === "") {
         delete cleaned[field];
       } else if (cleaned[field].length > 0) {
-        cleaned[field] = cleaned[field].filter(item => item.trim() !== '');
+        cleaned[field] = cleaned[field].filter((item) => item.trim() !== "");
         if (cleaned[field].length === 0) {
           delete cleaned[field];
         }
@@ -72,7 +141,7 @@ const AddComicForm = () => {
     });
 
     // Eliminar campos opcionales vacíos
-    if (!cleaned.pages || cleaned.pages === '') {
+    if (!cleaned.pages || cleaned.pages === "") {
       delete cleaned.pages;
     }
 
@@ -81,28 +150,28 @@ const AddComicForm = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    
+
     // Validación especial para la fecha
-    if (name === 'published_date') {
+    if (name === "published_date") {
       if (!validateDate(value)) {
-        setError(prev => ({
+        setError((prev) => ({
           ...prev,
-          published_date: "Por favor, introduce unha data válida"
+          published_date: "Por favor, introduce unha data válida",
         }));
       } else {
-        setError(prev => ({
+        setError((prev) => ({
           ...prev,
-          published_date: null
+          published_date: null,
         }));
       }
     }
-    
+
     setComicData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
-    
-    if (value && name !== 'published_date') {
+
+    if (value && name !== "published_date") {
       setError((prevErrors) => ({
         ...prevErrors,
         [name]: null,
@@ -183,7 +252,7 @@ const AddComicForm = () => {
       "publisher",
       "published_date",
       "synopsis",
-      "club_season"
+      "club_season",
     ];
     if (comicData.published_date) {
       const dateValidation = validateDate(comicData.published_date);
@@ -240,11 +309,11 @@ const AddComicForm = () => {
       const response = await addComic(formData);
       toast.success(response.message);
       setComicData(initialData);
-      setCleanedData(null)
+      setCleanedData(null);
       setCoverPreview(null);
       setError({});
       setIsModalOpen(false);
-      navigate("/comic/" + response.newComic._id); // Redirigir al usuario a la página del cómic recién creado"); 
+      navigate("/comic/" + response.newComic._id); // Redirigir al usuario a la página del cómic recién creado");
     } catch (err) {
       toast.error("Error ao engadir o cómic");
     }
@@ -293,12 +362,14 @@ const AddComicForm = () => {
 
   return (
     <>
-    <span className="back-button" onClick={() => navigate(-1)}>
-          <TiArrowBackOutline />{" "}
-        </span>
+      <span className="back-button" onClick={() => navigate(-1)}>
+        <TiArrowBackOutline />{" "}
+      </span>
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Título: <span style={{color:"red"}}>*</span></label>
+          <label>
+            Título: <span style={{ color: "red" }}>*</span>
+          </label>
           <input
             type="text"
             name="title"
@@ -309,9 +380,23 @@ const AddComicForm = () => {
           />
           {error?.title && <p className="error">{error.title}</p>}
         </div>
-
         <div>
-          <label>Título Orixinal: <span style={{color:"red"}}>*</span></label>
+          <button
+            type="button"
+            onClick={() => setIsScanning((prev) => !prev)}
+            className="form-button"
+          >
+            {isScanning ? "Detener escaneo" : "Escanear código de barras"}
+          </button>
+        </div>
+
+        {isScanning && (
+          <div id="reader" style={{ width: "300px", marginTop: "20px" }}></div>
+        )}
+        <div>
+          <label>
+            Título Orixinal: <span style={{ color: "red" }}>*</span>
+          </label>
           <input
             type="text"
             name="original_title"
@@ -326,7 +411,9 @@ const AddComicForm = () => {
         </div>
 
         <div>
-          <label>Guión: <span style={{color:"red"}}>*</span></label>
+          <label>
+            Guión: <span style={{ color: "red" }}>*</span>
+          </label>
           {comicData.writers.map((writer, index) => (
             <div key={index} className="array-field">
               <input
@@ -348,10 +435,11 @@ const AddComicForm = () => {
               )}
             </div>
           ))}
-          <button className="form-button add-button"
+          <button
+            className="form-button add-button"
             type="button"
             onClick={() => handleAddToArrayField("writers")}
-            disabled={!comicData.writers[0]} 
+            disabled={!comicData.writers[0]}
           >
             +
           </button>{" "}
@@ -359,7 +447,9 @@ const AddComicForm = () => {
         </div>
 
         <div>
-          <label>Debuxo: <span style={{color:"red"}}>*</span></label>
+          <label>
+            Debuxo: <span style={{ color: "red" }}>*</span>
+          </label>
           {comicData.artists.map((artist, index) => (
             <div key={index} className="array-field">
               <input
@@ -370,7 +460,7 @@ const AddComicForm = () => {
                 onBlur={(e) => validateField("artists", comicData.artists)}
                 required
               />
-              {index > 0 && ( 
+              {index > 0 && (
                 <button
                   type="button"
                   onClick={() => handleRemoveFromArray("artists", index)}
@@ -381,7 +471,8 @@ const AddComicForm = () => {
               )}
             </div>
           ))}
-          <button className="form-button add-button"
+          <button
+            className="form-button add-button"
             type="button"
             onClick={() => handleAddToArrayField("artists")}
             disabled={!comicData.artists[0]}
@@ -403,7 +494,7 @@ const AddComicForm = () => {
                 onBlur={(e) => validateField("colorists", comicData.colorists)}
                 required
               />
-              {index > 0 && ( 
+              {index > 0 && (
                 <button
                   type="button"
                   onClick={() => handleRemoveFromArray("colorists", index)}
@@ -414,7 +505,8 @@ const AddComicForm = () => {
               )}
             </div>
           ))}
-          <button className="form-button add-button"
+          <button
+            className="form-button add-button"
             type="button"
             onClick={() => handleAddToArrayField("colorists")}
             disabled={!comicData.colorists[0]}
@@ -424,7 +516,9 @@ const AddComicForm = () => {
         </div>
 
         <div>
-          <label>Editorial: <span style={{color:"red"}}>*</span></label>
+          <label>
+            Editorial: <span style={{ color: "red" }}>*</span>
+          </label>
           <input
             type="text"
             name="publisher"
@@ -437,16 +531,18 @@ const AddComicForm = () => {
         </div>
 
         <div>
-          <label>Data de Publicación: <span style={{color:"red"}}>*</span></label>
+          <label>
+            Data de Publicación: <span style={{ color: "red" }}>*</span>
+          </label>
           <input
-          type="date"
-          name="published_date"
-          value={comicData.published_date}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          required
-          max={new Date().toISOString().split('T')[0]} // Impide seleccionar fechas futuras
-        />
+            type="date"
+            name="published_date"
+            value={comicData.published_date}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            required
+            max={new Date().toISOString().split("T")[0]} // Impide seleccionar fechas futuras
+          />
           {error?.published_date && (
             <p className="error">{error.published_date}</p>
           )}
@@ -464,7 +560,7 @@ const AddComicForm = () => {
                 onBlur={(e) => validateField("genres", comicData.genres)}
                 required
               />
-              {index > 0 && ( 
+              {index > 0 && (
                 <button
                   type="button"
                   onClick={() => handleRemoveFromArray("genres", index)}
@@ -475,7 +571,8 @@ const AddComicForm = () => {
               )}
             </div>
           ))}
-          <button className="form-button add-button"
+          <button
+            className="form-button add-button"
             type="button"
             onClick={() => handleAddToArrayField("genres")}
             disabled={!comicData.genres[0]}
@@ -505,7 +602,9 @@ const AddComicForm = () => {
         </div>
 
         <div>
-          <label>Sinopsis: <span style={{color:"red"}}>*</span></label>
+          <label>
+            Sinopsis: <span style={{ color: "red" }}>*</span>
+          </label>
           <textarea
             name="synopsis"
             value={comicData.synopsis}
@@ -526,30 +625,32 @@ const AddComicForm = () => {
           />
         </div>
         <div>
-        <label>Tempada do Clube: <span style={{color:"red"}}>*</span></label>
-        <select
-          name="club_season"
-          value={comicData.club_season}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          className="form-select"
-          required
-        >
-          <option value="libre">Libre</option>
-          <option value="24-25">24-25</option>
-        </select>
-        {error?.club_season && (
-            <p className="error">{error.club_season}</p>
-          )}
-      </div>
+          <label>
+            Tempada do Clube: <span style={{ color: "red" }}>*</span>
+          </label>
+          <select
+            name="club_season"
+            value={comicData.club_season}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            className="form-select"
+            required
+          >
+            <option value="libre">Libre</option>
+            <option value="24-25">24-25</option>
+          </select>
+          {error?.club_season && <p className="error">{error.club_season}</p>}
+        </div>
         <button className="form-button submit" onClick={handleSubmit}>
           Engadir Cómic
         </button>
       </form>
       <ConfirmationModal
         isOpen={isModalOpen}
-        onClose={() => {setIsModalOpen(false);
-         setCleanedData(null)}}
+        onClose={() => {
+          setIsModalOpen(false);
+          setCleanedData(null);
+        }}
         onConfirm={confirmSubmit}
         comicData={cleanedData}
         coverPreview={coverPreview}
