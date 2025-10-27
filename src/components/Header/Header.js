@@ -7,7 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 const Header = ({ logout }) => {
   const navigate = useNavigate();
   const isMobile = useIsMobile()  
-  const seasons = ["24-25", "23-24", "libre"];
+  const seasons = ["25-26", "24-25", "libre"];
   const [actualSeason, setActualSeason] = useState(seasons[0]);
   const handleSeasonSelect = (season) => {
     setActualSeason(season);
