@@ -7,6 +7,7 @@ const ConfirmationModal = ({
   onConfirm,
   comicData,
   coverPreview,
+  isSubmitting = false,
 }) => {
   if (!isOpen) return null;
   console.log(comicData);
@@ -73,10 +74,18 @@ const ConfirmationModal = ({
             </p>
           </div>
           <div className="modal-buttons">
-            <button className="form-button add-button" onClick={onConfirm}>
-              Confirmar
+            <button 
+              className="form-button add-button" 
+              onClick={onConfirm}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Enviando..." : "Confirmar"}
             </button>
-            <button className="form-button add-button" onClick={onClose}>
+            <button 
+              className="form-button add-button" 
+              onClick={onClose}
+              disabled={isSubmitting}
+            >
               Cancelar
             </button>{" "}
           </div>

@@ -20,14 +20,14 @@ function AuthenticatedApp() {
 
   return (
     <div className="App">
-       <Header logout={logout} />
-      
+      <Header logout={logout} />
+
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<UserSelect />} />
         <Route path="/comic/:id" element={<ComicDetail />} />
-        <Route path="/past-comics/:season" element={<LandingPage />} />
-        <Route path="/add-comic" element={<AddComicForm/>} />
+        <Route path="/show-comics/:season" element={<LandingPage />} />
+        <Route path="/add-comic" element={<AddComicForm />} />
       </Routes>
     </div>
   );
@@ -38,7 +38,7 @@ function App() {
     <AuthProvider>
       <Router>
         <AuthenticatedApp />
-        <ToastContainer  position="top-center" autoClose={2500} />
+        <ToastContainer position="top-center" autoClose={2500} />
       </Router>
     </AuthProvider>
   );

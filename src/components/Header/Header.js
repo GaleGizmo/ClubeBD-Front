@@ -1,17 +1,17 @@
 import "./Header.css";
 import React, { useState } from "react";
-import { useIsMobile } from "../../hooks/IsMobile"; 
+import { useIsMobile } from "../../hooks/IsMobile";
 import { IoLogOutOutline } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 
 const Header = ({ logout }) => {
   const navigate = useNavigate();
-  const isMobile = useIsMobile()  
+  const isMobile = useIsMobile();
   const seasons = ["25-26", "24-25", "libre"];
   const [actualSeason, setActualSeason] = useState(seasons[0]);
   const handleSeasonSelect = (season) => {
     setActualSeason(season);
-    navigate(`/past-comics/${season}`); // Navegar a la temporada seleccionada
+    navigate(`/show-comics/${season}`); // Navegar a la temporada seleccionada
   };
   const handleLogout = () => {
     logout();
@@ -19,17 +19,27 @@ const Header = ({ logout }) => {
   };
   return (
     <header>
-      <button className={isMobile ? "add-form-button-mobile" : "add-form-button"}>
+      <button
+        className={isMobile ? "add-form-button-mobile" : "add-form-button"}
+      >
         <Link to={{ pathname: "/add-comic" }}>
-          <span className={isMobile ? "add-form-button_text_mobile": "add-form-button_text" }>{isMobile ? "+":"ENGADIR"}</span>
+          <span
+            className={
+              isMobile ? "add-form-button_text_mobile" : "add-form-button_text"
+            }
+          >
+            {isMobile ? "+" : "ENGADIR"}
+          </span>
         </Link>
       </button>
-      {actualSeason && <h1>TERRA {actualSeason.toLocaleUpperCase()}</h1>}
+      {actualSeason && (
+        <Link to={`/show-comics/${actualSeason}`}>
+          <h1>TERRA {actualSeason.toLocaleUpperCase()}</h1>
+        </Link>
+      )}
       <nav>
         <div className="seasons-dropdown">
-          <label htmlFor="season-select">
-           
-          </label>
+          <label htmlFor="season-select"></label>
           <select
             id="season-select"
             onChange={(e) => handleSeasonSelect(e.target.value)} // Manejar selección de temporada
