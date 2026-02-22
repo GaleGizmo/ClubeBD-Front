@@ -127,6 +127,10 @@ header nav {
     font-size: 18px;
     padding: 10px;
   }
+  header a {
+    font-size: 14px;
+    padding: 10px;
+  }
   .add-form-button {
     max-width: 150px; /* Ajuste de ancho en pantallas medianas */
     height: 45px;
@@ -134,6 +138,7 @@ header nav {
   header nav {
     padding: 0;
     width: 60px;
+    margin-right: 30px;
   }
   .seasons-dropdown {
     display: flex;
