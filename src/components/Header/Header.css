@@ -44,7 +44,7 @@ header {
 .add-form-button-mobile {
   width: 30px;
   height: 30px;
-  margin: 0 15px;
+  margin-left: 30px;
   border: 2px solid #000000;
   border-radius: 50%;
   background: linear-gradient(to bottom right, #f36555, #e74c3c);
@@ -129,7 +129,6 @@ header nav {
   }
   header a {
     font-size: 14px;
-    padding: 10px;
   }
   .add-form-button {
     max-width: 150px; /* Ajuste de ancho en pantallas medianas */
