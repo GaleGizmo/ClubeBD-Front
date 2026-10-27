@@ -16,7 +16,7 @@ function LandingPage() {
 
   useEffect(() => {
     async function fetchComics() {
-      const fetchedComics = await getComics(season || "25-26");
+      const fetchedComics = await getComics(season || "26-27");
       if (fetchedComics === 404) {
         setNoComicsMessage(true);
       } else {

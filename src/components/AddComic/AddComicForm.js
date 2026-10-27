@@ -560,7 +560,7 @@ const AddComicForm = () => {
             required
           >
             <option value="libre">Libre</option>
-            <option value="25-26">25-26</option>
+            <option value="26-27">26-27</option>
           </select>
           {error?.club_season && <p className="error">{error.club_season}</p>}
         </div>
