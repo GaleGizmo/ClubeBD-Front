@@ -16,9 +16,10 @@ header {
   letter-spacing: 3px;
 }
 .seasons-dropdown select {
-  border-radius: 20%;
+  border-radius: 16px;
   font-size: 14px;
   padding: 5px 3px;
+  text-align: center;
 }
 .seasons-dropdown option {
   font-size: 14px;
@@ -53,7 +54,7 @@ header {
   align-items: center;
 }
 .add-form-button_text_mobile {
-  font-size: 2rem;
+  font-size: 1.8rem;
 
   font-weight: 700;
   color: black;
@@ -136,7 +137,7 @@ header nav {
   }
   header nav {
     padding: 0;
-    width: 60px;
+    width: 64px;
     margin-right: 30px;
   }
   .seasons-dropdown {

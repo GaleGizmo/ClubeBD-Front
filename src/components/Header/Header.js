@@ -7,8 +7,8 @@ import { Link, useNavigate } from "react-router-dom";
 const Header = ({ logout }) => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
-  const seasons = ["26-27", "25-26", "24-25", "libre"];
-  const [actualSeason, setActualSeason] = useState(seasons[0]);
+  const seasons = ["todas", "26-27", "25-26", "24-25", "libre"];
+  const [actualSeason, setActualSeason] = useState(seasons[1]);
   const handleSeasonSelect = (season) => {
     setActualSeason(season);
     navigate(`/show-comics/${season}`); // Navegar a la temporada seleccionada
@@ -42,7 +42,8 @@ const Header = ({ logout }) => {
           <label htmlFor="season-select"></label>
           <select
             id="season-select"
-            onChange={(e) => handleSeasonSelect(e.target.value)} // Manejar selección de temporada
+            onChange={(e) => handleSeasonSelect(e.target.value)}
+            defaultValue={"26-27"} // Manejar selección de temporada
           >
             {seasons.map((season) => (
               <option key={season} value={season}>
